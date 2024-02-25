@@ -327,8 +327,11 @@ abstract class BaseBrowserFragment : Fragment(), UserInteractionHandler, Activit
             )
         }
 
-        val composeView = view.findViewById<ComposeView>(R.id.compose_view)
         if (shouldUseComposeUI) {
+            val composeView = LayoutInflater
+                .from(this.context)
+                .inflate(R.layout.compose_tool_bar, view as ViewGroup)
+                .findViewById<ComposeView>(R.id.compose_view)
             composeView.visibility = View.VISIBLE
             composeView.setContent { BrowserToolbar() }
 

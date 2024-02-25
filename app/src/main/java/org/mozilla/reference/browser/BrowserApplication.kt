@@ -5,6 +5,7 @@
 package org.mozilla.reference.browser
 
 import android.app.Application
+import androidx.startup.AppInitializer
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,6 +23,7 @@ import mozilla.components.support.rusthttp.RustHttpConfig
 import mozilla.components.support.rustlog.RustLog
 import mozilla.components.support.webextensions.WebExtensionSupport
 import org.mozilla.reference.browser.ext.isCrashReportActive
+import org.mozilla.reference.browser.initializer.WorkManagerInitializer
 import org.mozilla.reference.browser.push.PushFxaIntegration
 import org.mozilla.reference.browser.push.WebPushEngineIntegration
 import java.util.concurrent.TimeUnit
@@ -102,6 +104,8 @@ open class BrowserApplication : Application() {
         }
         @OptIn(DelicateCoroutinesApi::class)
         GlobalScope.launch(Dispatchers.IO) {
+            val initializer = AppInitializer.getInstance(this@BrowserApplication)
+            initializer.initializeComponent(WorkManagerInitializer::class.java)
             components.core.fileUploadsDirCleaner.cleanUploadsDirectory()
         }
     }
